@@ -1,13 +1,15 @@
 package com.aditya.aigateway.controller;
 
 
+import com.aditya.aigateway.exception.GatewayException;
 import com.aditya.aigateway.model.GatewayRequest;
 import com.aditya.aigateway.model.GatewayResponse;
+import com.aditya.aigateway.ratelimit.RateLimiterService;
 import com.aditya.aigateway.service.GatewayService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GatewayController {
     private final GatewayService gatewayService;
+    private final RateLimiterService rateLimiterService;
 
     @PostMapping("/chat")
     public ResponseEntity<GatewayResponse> chat(@RequestBody GatewayRequest request, HttpServletRequest httpRequest) {
@@ -27,6 +30,16 @@ public class GatewayController {
         //client id :
         String clientId = (String) httpRequest.getAttribute("clientId");
         request.setClientId(clientId);
+
+        // Check rate limit before processing
+        if (!rateLimiterService.isAllowed(clientId)) {
+            throw new GatewayException(
+                    "Rate limit exceeded. Max " +
+                            "requests per minute allowed. Try again later.",
+                    HttpStatus.TOO_MANY_REQUESTS);
+        }
+
+
         log.info("Received request | client_id = {} tier={} task={}", request.getClientId(),request.getTier(), request.getTask());
         GatewayResponse response = gatewayService.process(request);
         return ResponseEntity.ok(response);

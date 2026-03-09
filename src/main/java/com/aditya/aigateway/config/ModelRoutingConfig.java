@@ -15,11 +15,18 @@ public class ModelRoutingConfig {
     private String defaultModel;
 
     private Map<String, String> apiKeys; // AUTH FILTER
+    private RateLimitConfig rateLimit; //rateLimiter
 
     @Data
     public static class ProviderConfig {
         private String apiKey;
         private String baseUrl;
         private int timeoutSeconds;
+    }
+
+    @Data
+    public static class RateLimitConfig{
+        private int requestsPerMinute;
+        private int burstCapacity;
     }
 }
