@@ -42,6 +42,15 @@
 #  level:
 #    com.yourname: DEBUG
 
+spring:
+  application:
+    name: ai-gateway
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
 
 gateway:
 
@@ -50,6 +59,10 @@ gateway:
     client-app-1: "key-abc123"
     client-app-2: "key-xyz789"
     test-client: "key-test999"
+
+  rate-limit:
+    requests-per-minute: 10
+    burst-capacity: 5
 
 
   default-model: "llama-3.3-70b-versatile"
