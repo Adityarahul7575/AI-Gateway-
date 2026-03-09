@@ -1,0 +1,84 @@
+#yamlserver:
+#  port: 8080
+#
+#spring:
+#  application:
+#    name: ai-gateway
+#
+#gateway:
+#
+#  # --- Routing Rules (this is how gateway picks a model) ---
+#  default-model: "gpt-4o-mini"
+#
+#  tier-model-map:
+#    fast:   "gpt-4o-mini"        # cheap + quick
+#    smart:  "claude-3-5-sonnet"  # best reasoning
+#    cheap:  "gemini-1.5-flash"   # lowest cost
+#
+#  task-model-map:
+#    code:      "gpt-4o"              # GPT strong at code
+#    summarize: "gemini-1.5-flash"    # Gemini fast for summarization
+#    analyze:   "claude-3-5-sonnet"   # Claude strong at analysis
+#    chat:      "gpt-4o-mini"         # default chat
+#
+#  # --- Provider Credentials ---
+#  providers:
+#    openai:
+#      api-key: ${OPENAI_API_KEY}
+#      base-url: https://api.openai.com/v1
+#      timeout-seconds: 30
+#
+#    anthropic:
+#      api-key: ${ANTHROPIC_API_KEY}
+#      base-url: https://api.anthropic.com/v1
+#      timeout-seconds: 30
+#
+#    gemini:
+#      api-key: ${GEMINI_API_KEY}
+#      base-url: https://generativelanguage.googleapis.com/v1beta
+#      timeout-seconds: 30
+#
+#logging:
+#  level:
+#    com.yourname: DEBUG
+
+
+gateway:
+
+  # Valid API keys for clients calling YOUR gateway
+  api-keys:
+    client-app-1: "key-abc123"
+    client-app-2: "key-xyz789"
+    test-client: "key-test999"
+
+
+  default-model: "llama-3.3-70b-versatile"
+
+  tier-model-map:
+    fast:   "llama-3.1-8b-instant"
+    smart:  "llama-3.3-70b-versatile"
+    cheap:  "llama-3.1-8b-instant"
+
+  task-model-map:
+    code:      "llama-3.3-70b-versatile"
+    summarize: "llama-3.1-8b-instant"
+    analyze:   "llama-3.3-70b-versatile"
+    chat:      "llama-3.1-8b-instant"
+
+  providers:
+    openai:
+      api-key: "dummy"
+      base-url: https://api.openai.com/v1
+      timeout-seconds: 30
+    anthropic:
+      api-key: "dummy"
+      base-url: https://api.anthropic.com/v1
+      timeout-seconds: 30
+    gemini:
+      api-key: ${GEMINI_API_KEY}
+      base-url: https://generativelanguage.googleapis.com/v1beta
+      timeout-seconds: 30
+    groq:
+      api-key: ${GROQ_API_KEY}
+      base-url: https://api.groq.com/openai/v1
+      timeout-seconds: 30
